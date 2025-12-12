@@ -1,0 +1,2 @@
+Context :
+Saya sedang buat traditional klasifikasi(Bukan deep learning model) untuk mengklasifikasi makanan berkuah atau tidak. Untuk dataset, ada folder bernama './Makanan', dan didalam folder tersebut ada 2 folder yaitu folder 'Berkuah' dan 'Tidak berkuah'. Untuk preprocessing juga menggunakan traditional (bukan deep learning). Ada evaluasi untuk tiap preprocessing ke tiap model. Satu projek ini banyak jenis preprocessing. Lalu 1 jenis preprocessing bisa ditest untuk semua model
