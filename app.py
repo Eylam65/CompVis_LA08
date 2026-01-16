@@ -2,9 +2,11 @@ import streamlit as st
 import cv2
 import numpy as np
 import pickle
+import time
 from skimage.feature import local_binary_pattern
 from skimage.feature import graycomatrix, graycoprops
 
+st.set_page_config(page_title="Robobite Delivery System", page_icon="🤖")
 
 # Load model
 with open("model_makanan_full.pkl", "rb") as f:
@@ -51,14 +53,17 @@ def extract_combined_features(image):
 feature_extractors = {
     "Combined": extract_combined_features
 }
-
-st.title("Prediksi Makanan Berkuah / Tidak Berkuah 🍲")
+st.title("Robobite: Smart Food Delivery 🤖🍲")
+st.markdown("Sistem klasifikasi makanan untuk mengatur kecepatan robot pengantar.")
+# st.title("Prediksi Makanan Berkuah / Tidak Berkuah 🍲")
 uploaded_file = st.file_uploader("Upload gambar makanan", type=["jpg","jpeg","png"])
 
 if uploaded_file is not None:
     file_bytes = np.frombuffer(uploaded_file.read(), np.uint8)
     img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
-    st.image(cv2.cvtColor(img, cv2.COLOR_BGR2RGB), caption="Gambar yang di-upload", use_container_width=True)
+    col1, col2 = st.columns(2)
+    with col1:
+        st.image(cv2.cvtColor(img, cv2.COLOR_BGR2RGB), caption="Gambar yang di-upload", use_container_width=True)
 
     
     # Ekstrak fitur
@@ -68,5 +73,41 @@ if uploaded_file is not None:
     
     # Prediksi
     pred = model.predict(features)[0]
-    label = "Berkuah 🍲" if pred==0 else "Tidak Berkuah 🥗"
-    st.success(f"Hasil prediksi: {label}")
+    # label = "Berkuah 🍲" if pred==0 else "Tidak Berkuah 🥗"
+    # st.success(f"Hasil prediksi: {label}")
+    with col2:
+        st.subheader("Hasil Analisis")
+        if pred == 0:
+            label = "Berkuah 🍲"
+            speed_text = "Lambat (Hati-hati tumpah!)"
+            speed_delay = 0.15  # Lebih lambat
+            st.warning(f"Prediksi: **{label}**")
+        else:
+            label = "Tidak Berkuah 🥗"
+            speed_text = "Normal/Sedikit Cepat"
+            speed_delay = 0.03  # Lebih cepat
+            st.success(f"Prediksi: **{label}**")
+        
+        st.info(f"Mode Jalan: **{speed_text}**")
+    st.divider()
+    st.subheader("Robobite Status: Sedang Mengantar ke Meja Tujuan...")
+    
+    # Placeholder untuk teks status dan progress bar
+    status_text = st.empty()
+    progress_bar = st.progress(0)
+    robot_icon = st.empty()
+
+    for percent_complete in range(101):
+        # Animasi sederhana menggunakan emoji
+        distance = percent_complete // 5
+        robot_line = " " * distance + "🤖" + "—" * (20 - distance) + " 🏁 (Meja)"
+        robot_icon.text(robot_line)
+        
+        status_text.text(f"Progress Pengantaran: {percent_complete}%")
+        progress_bar.progress(percent_complete)
+        
+        # Pengaturan kecepatan berdasarkan jenis makanan
+        time.sleep(speed_delay)
+
+    st.balloons()
+    st.success("✅ Pesanan telah sampai di meja tujuan dengan aman!")
