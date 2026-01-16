@@ -80,12 +80,12 @@ if uploaded_file is not None:
         if pred == 0:
             label = "Berkuah 🍲"
             speed_text = "Lambat (Hati-hati tumpah!)"
-            speed_delay = 5  # Lebih lambat
+            speed_delay = 0.35  # Lebih lambat
             st.warning(f"Prediksi: **{label}**")
         else:
             label = "Tidak Berkuah 🥗"
             speed_text = "Normal/Sedikit Cepat"
-            speed_delay = 3  # Lebih cepat
+            speed_delay = 0.1  # Lebih cepat
             st.success(f"Prediksi: **{label}**")
         
         st.info(f"Mode Jalan: **{speed_text}**")
