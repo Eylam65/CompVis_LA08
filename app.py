@@ -90,14 +90,22 @@ if uploaded_file is not None:
         
         st.info(f"Mode Jalan: **{speed_text}**")
     st.divider()
-    st.subheader("Robobite Status: Sedang Mengantar ke Meja Tujuan...")
     
     # Placeholder untuk teks status dan progress bar
     status_text = st.empty()
+    status_box = st.empty()
     progress_bar = st.progress(0)
     robot_icon = st.empty()
 
     for percent_complete in range(101):
+        status_box.markdown(
+            f"""
+            <div style="background-color: #fcf3cf; padding: 15px; border-radius: 5px; border-left: 5px solid #f1c40f;">
+                <span style="color: #9a7d0a; font-weight: bold;">🚚 Status: Sedang dalam perjalanan...</span>
+            </div>
+            """, 
+            unsafe_allow_html=True
+        )
         # Animasi sederhana menggunakan emoji
         distance = percent_complete // 5
         robot_line = " " * distance + "🤖" + "—" * (20 - distance) + " 🏁 (Meja)"
@@ -108,6 +116,13 @@ if uploaded_file is not None:
         
         # Pengaturan kecepatan berdasarkan jenis makanan
         time.sleep(speed_delay)
-
+    status_box.markdown(
+        f"""
+        <div style="background-color: #d4edda; padding: 15px; border-radius: 5px; border-left: 5px solid #28a745;">
+            <span style="color: #155724; font-weight: bold;">✅ Status: Sampai di tujuan!</span>
+        </div>
+        """, 
+        unsafe_allow_html=True
+    )
     st.balloons()
     st.success("✅ Pesanan telah sampai di meja tujuan dengan aman!")
